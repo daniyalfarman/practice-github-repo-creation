@@ -1,13 +1,12 @@
-name: Python CI Demo
+name: CI → CD Demo
 
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 jobs:
-  build:
+  ci:
+    name: Continuous Integration
     runs-on: ubuntu-latest
 
     steps:
@@ -19,5 +18,26 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run Python file
+      - name: Run application tests
         run: python app.py
+
+  cd:
+    name: Continuous Deployment
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy application
+        run: |
+          echo "Deployment successful at $(date)" > deploy.txt
+
+      - name: Commit deployment artifact
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add deploy.txt
+          git commit -m "CD: automatic deployment"
+          git push
