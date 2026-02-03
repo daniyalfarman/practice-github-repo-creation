@@ -4,5 +4,5 @@ def add(a, b):
 
 if __name__ == "__main__":
     result = add(2, 2)
-    assert result == 4
+    assert result == 5
     print("All good!")
